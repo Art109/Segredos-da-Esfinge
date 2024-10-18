@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: b37f86f0da4cc214bb8b3461669e29be
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - pedraPrefab: {fileID: 8205516303824424037, guid: 5036f59ce7fa7824a8d04ecdda865a14, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
