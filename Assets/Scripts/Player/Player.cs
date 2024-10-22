@@ -41,6 +41,8 @@ public class Player : MonoBehaviour
     private bool canTake = true;
     [SerializeField] int pesoObjetivo = 0;
     public int PesoObjetivo { get => pesoObjetivo; set => pesoObjetivo = value; }
+    (int numerador, int denominador) fracaoPesoObjetivo;
+    public (int numerador, int denominador) FracaoPesoObjetivo { get; set; }
 
     // Audio
     public AudioSource somPegadas;

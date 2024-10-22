@@ -11,8 +11,11 @@ public class GameManager : MonoBehaviour
 {
     private Piramide piramide;
     public Piramide Piramide { get => piramide; }
+
+    //Player Management
     private List<Player> players;
     public List<Player> Players { get => players; }
+    private PlayerInitializer playerInitializer;
 
     private ContaTempo contaTempo;
 
@@ -41,8 +44,8 @@ public class GameManager : MonoBehaviour
     // Vida
     public UnityEngine.UI.Image[] P1Hearts;
     public UnityEngine.UI.Image[] P2Hearts;
-    public UnityEngine.UI.Image[] P3Hearts;
-    public UnityEngine.UI.Image[] P4Hearts;
+    //public UnityEngine.UI.Image[] P3Hearts;
+    //public UnityEngine.UI.Image[] P4Hearts;
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
@@ -64,7 +67,9 @@ public class GameManager : MonoBehaviour
     {
         contaTempo = GetComponent<ContaTempo>();
         cameraFollow = FindObjectOfType<CameraFollow>();
-        players = new List<Player>(FindObjectsOfType<Player>());
+        players = new List<Player>();
+        playerInitializer = gameObject.GetComponent<PlayerInitializer>();
+        playerInitializer.IniatlizaPlayers(players);
         Sortear_Peso_Jogadores(piramide);
         desativarSalasRestantesEAtivarSalaAtual();
 
@@ -83,8 +88,8 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < playerPesoTexts.Length; i++)
         {
-            (int, int) pesos = SorteadorPeso.SimplificarFracao(players[i].PesoObjetivo, piramide.SalaAtual.Balances[0].PesoMaximo);
-            playerPesoTexts[i].text = pesos.Item1.ToString() + " / " + pesos.Item2.ToString();
+            
+            playerPesoTexts[i].text = players[i].FracaoPesoObjetivo.numerador + " / " + players[i].FracaoPesoObjetivo.denominador;
         }
     }
 
@@ -107,10 +112,11 @@ public class GameManager : MonoBehaviour
                 return P1Hearts;
             case "P2":
                 return P2Hearts;
-            case "P3":
+           /* case "P3":
                 return P3Hearts;
             case "P4":
                 return P4Hearts;
+            */
             default:
                 Debug.LogError("Unknown player number: " + playerNum);
                 return null;
@@ -142,8 +148,7 @@ public class GameManager : MonoBehaviour
         if (piramide.SalaAtual.Numero < 3)
         {
             // A sala 1 e 2 só tem uma balança na lista, então o índice é 0
-            SorteadorPeso.DividePeso(piramide.SalaAtual.Balances[0].PesoMaximo, 
-                players.Count, players, piramide);
+            ObjectiveGenerator.DividirPeso(piramide.SalaAtual.Balances[0].PesoMaximo, players);
         }
         else
         {
@@ -287,7 +292,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (quantidadeDeJogadoresQueAcabaram == 4)
+        if (quantidadeDeJogadoresQueAcabaram == players.Count)
         {
             SceneManager.LoadScene("FimMinigame");
         }
