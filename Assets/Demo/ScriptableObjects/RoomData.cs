@@ -7,5 +7,8 @@ public class RoomData : ScriptableObject
 {
     [SerializeField] List<GameObject> rooms;
 
-    public List<GameObject> Rooms => rooms;
+    public List<GameObject> Rooms {
+        get{return rooms;}
+        
+        }
 }

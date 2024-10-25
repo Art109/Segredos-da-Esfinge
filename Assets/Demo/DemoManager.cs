@@ -9,14 +9,38 @@ public class DemoManager : MonoBehaviour
    int roomIndex = 0;
 
 
+  void OnEnable(){
+    Room.OnRoomEndend += ChangeRoom;
+  }
+
+  void OnDisable(){
+    Room.OnRoomEndend -= ChangeRoom;
+  }
+
    void Start(){
-        RoomInitializer(roomIndex);
+        RoomInitializer();
    }
 
-   void RoomInitializer(int index){
-        Instantiate(roomData.Rooms[index]);
-        roomIndex++;
+
+   void RoomInitializer(){
+        if(roomIndex == roomData.Rooms.Count)
+        {
+          Debug.Log("O jogo acabou");
+        }
+        else
+        {
+          Instantiate(roomData.Rooms[roomIndex]);
+          roomIndex++;
+        }
+        
    }
+
+   void ChangeRoom(){
+     RoomInitializer();
+   }
+
+
+   
    
    
    
