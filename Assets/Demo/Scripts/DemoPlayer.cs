@@ -7,9 +7,10 @@ using UnityEngine;
 public class DemoPlayer : MonoBehaviour
 {
     [Header("Atributos do jogador")]
-    [SerializeField]float moveSpeed;
-    [SerializeField]float pontos;
-    [SerializeField]int vida;
+    [SerializeField]float baseSpeed;
+    [SerializeField]float currentSpeed;
+    [SerializeField]float points;
+    [SerializeField]int life;
     Vector2 input;
     Rigidbody2D rb;
     Animator animator;
@@ -18,7 +19,7 @@ public class DemoPlayer : MonoBehaviour
     [SerializeField]LayerMask interactableLayer;
     [SerializeField]float interactableRange;
     bool carryingRock;
-    Rock rockCarried;
+    DemoRock rockCarried;
 
     public AudioSource somPegadas;
 
@@ -30,6 +31,7 @@ public class DemoPlayer : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        currentSpeed = baseSpeed;
     }
 
     // Update is called once per frame
@@ -41,7 +43,7 @@ public class DemoPlayer : MonoBehaviour
 
     void playSomPegadas(bool boolean)
     {
-        somPegadas.pitch = moveSpeed + 0.5f;
+        somPegadas.pitch = currentSpeed + 0.5f;
         somPegadas.enabled = boolean;
     }
 
@@ -51,7 +53,7 @@ public class DemoPlayer : MonoBehaviour
 
         input = new Vector2(moveX, moveY);
 
-        rb.velocity = input * moveSpeed;
+        rb.velocity = input * currentSpeed;
 
         if(rb.velocity != Vector2.zero){
             animator.SetFloat("x", moveX);
@@ -74,13 +76,32 @@ public class DemoPlayer : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, interactableRange);
     }
 
+    void UpdateSpeed(){
+        if(rockCarried != null){
+            if(rockCarried.Weight > 40){
+                currentSpeed = baseSpeed * 0.5f;
+                Debug.Log("Reduzir a velocidade");
+            }
+                
+            else if(rockCarried.Weight > 20)
+                currentSpeed = baseSpeed * 0.8f;
+            
+        }
+        else{
+            currentSpeed = baseSpeed;
+        }
+    }
+
     void Interaction(){
 
         Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, interactableRange, interactableLayer);
 
-        if(interactables.Length != 0){  
+        
+        Rock_Interaction(interactables);
 
-            Rock_Interaction(interactables);
+        if(interactables.Length != 0){  
+            
+            Debug.Log("Tem Algo Proximo");
 
         }
         
@@ -88,31 +109,69 @@ public class DemoPlayer : MonoBehaviour
 
     void Rock_Interaction(Collider2D[] interactables){
         if(carryingRock){
-            // Código para quando o jogador está carregando uma pedra
-            Balance_Interaction(interactables);
-            Abacus_Interaction(interactables);
+            
+            rockCarried.FollowPlayer(this);
+
+            
+            if(Input.GetKeyDown(KeyCode.F)){
+
+                    rockCarried.PlayAudioClip("Rock_Ground_Drop");
+                    rockCarried = null;
+                    carryingRock = false;
+                    UpdateSpeed();
+                    Debug.Log("Soltei uma pedra");
+            }
+
+            
         }
         else{
-            Rock rockNearby = null;  // Declaração de rockNearby fora do bloco else
+            DemoRock rockNearby = null;  
             foreach(Collider2D rock in interactables){
-                if(rock.GetComponent<Rock>() != null){
-                    rockNearby = rock.GetComponent<Rock>();
+                if(rock.GetComponent<DemoRock>() != null){
+                    rockNearby = rock.GetComponent<DemoRock>();
                     break;
                 }
             }
 
             if(rockNearby != null){
-                if(Input.GetKeyDown(KeyCode.F))
+                if(Input.GetKeyDown(KeyCode.F)){
                     rockCarried = rockNearby;
+                    carryingRock = true;
+                    rockCarried.PlayAudioClip("Rock_Ground_PickUp");
+                    UpdateSpeed();
+                    
+                    Debug.Log("Peguei uma pedra");
+                }
+                
             }
         }
     }
 
     void Balance_Interaction(Collider2D[] interactables){
+        DemoBalance balanceNearby = null;
+        foreach(Collider2D balance in interactables){
+            if(balance.GetComponent<DemoBalance>() != null){
+                balanceNearby = balance.GetComponent<DemoBalance>();
+                break;
+            }
+        }
 
+        if(balanceNearby != null){
+           balanceNearby.TakeRock(rockCarried,this);
+        }
     }
 
     void Abacus_Interaction(Collider2D[] interactables){
+        /*DemoBalance balanceNearby = null;
+        foreach(Collider2D balance in interactables){
+            if(balance.GetComponent<DemoBalance>() != null){
+                balanceNearby = balance.GetComponent<DemoBalance>();
+                break;
+            }
+        }
 
+        if(balanceNearby != null){
+           balanceNearby.TakeRock(rockCarried,this);
+        }*/
     }
 }

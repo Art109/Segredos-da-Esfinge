@@ -300,9 +300,9 @@ public class GameManager : MonoBehaviour
 
     private void limparPedras()
     {
-        List<Rock> pedras = new List<Rock>(FindObjectsOfType<Rock>());
+        List<DemoRock> pedras = new List<DemoRock>(FindObjectsOfType<DemoRock>());
 
-        foreach (Rock rock in pedras) { 
+        foreach (DemoRock rock in pedras) { 
             Destroy(rock.gameObject);
         }
     }

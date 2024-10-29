@@ -5,10 +5,10 @@ using TMPro;
 
 public class Abaco : MonoBehaviour
 {
-    private Rock pedraAtual; // Referência à pedra atualmente no ábaco
-    private Player jogadorAtual; // Referência ao jogador atual que colocou a pedra
+    private Rock pedraAtual; // Referï¿½ncia ï¿½ pedra atualmente no ï¿½baco
+    private Player jogadorAtual; // Referï¿½ncia ao jogador atual que colocou a pedra
 
-    // Variável de peso atual
+    // Variï¿½vel de peso atual
     [SerializeField] private float pesoAtual;
 
     [SerializeField] LayerMask rockLayer;
@@ -18,13 +18,13 @@ public class Abaco : MonoBehaviour
     // Prefab do texto para mostrar o peso
     [SerializeField] private GameObject pesoTextoPrefab;
 
-    private GameObject pesoTextoObj; // Referência ao objeto de texto atualmente exibido
+    private GameObject pesoTextoObj; // Referï¿½ncia ao objeto de texto atualmente exibido
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        pedraAtual = null; // Nenhuma pedra no início
-        jogadorAtual = null; // Nenhum jogador associado no início
+        pedraAtual = null; // Nenhuma pedra no inï¿½cio
+        jogadorAtual = null; // Nenhum jogador associado no inï¿½cio
     }
 
     public void TakeRock(Rock rock, Player player)
@@ -39,7 +39,7 @@ public class Abaco : MonoBehaviour
         }
         else
         {
-            Debug.Log("Já existe uma pedra no ábaco. Remova-a antes de adicionar outra.");
+            Debug.Log("Jï¿½ existe uma pedra no ï¿½baco. Remova-a antes de adicionar outra.");
         }
     }
 
@@ -53,7 +53,7 @@ public class Abaco : MonoBehaviour
             pesoAtual = 0f;
             spriteRenderer.color = Color.red;
 
-            // Destrói o objeto de texto quando a pedra é removida
+            // Destrï¿½i o objeto de texto quando a pedra ï¿½ removida
             if (pesoTextoObj != null)
             {
                 Destroy(pesoTextoObj);
@@ -69,7 +69,7 @@ public class Abaco : MonoBehaviour
             Destroy(pesoTextoObj);
         }
 
-        // Instancia o novo texto na posição do ábaco
+        // Instancia o novo texto na posiï¿½ï¿½o do ï¿½baco
         pesoTextoObj = Instantiate(pesoTextoPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
 
         TextMeshPro pesoTexto = pesoTextoObj.GetComponent<TextMeshPro>();
@@ -83,7 +83,7 @@ public class Abaco : MonoBehaviour
 
     IEnumerator AnimarTexto(GameObject pesoTextoObj)
     {
-        float duration = 0.3f; // Duração da animação
+        float duration = 0.3f; // Duraï¿½ï¿½o da animaï¿½ï¿½o
         Vector3 startPosition = pesoTextoObj.transform.position;
         Vector3 endPosition = startPosition + new Vector3(0, 0.4f, 0); 
 

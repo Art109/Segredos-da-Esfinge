@@ -17,8 +17,11 @@ public class DemoBalance : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.G))
-            BalanceCompleted();
+        
+    }
+
+    public void TakeRock(DemoRock rock, DemoPlayer player){
+        Debug.Log("O Player" + player + " me entregou a pedra" + rock);
     }
 
     void BalanceCompleted(){
