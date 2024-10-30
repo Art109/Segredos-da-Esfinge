@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DemoBalance : MonoBehaviour
+public class DemoBalance : MonoBehaviour, RockReceiver
 {
 
     public static event Action OnBalaceCompleted;
@@ -20,13 +20,20 @@ public class DemoBalance : MonoBehaviour
         
     }
 
-    public void TakeRock(DemoRock rock, DemoPlayer player){
-        Debug.Log("O Player" + player + " me entregou a pedra" + rock);
-    }
 
     void BalanceCompleted(){
         Debug.Log("Terminei a Balança");
         OnBalaceCompleted?.Invoke();
         
+    }
+
+    public void TakeRock(DemoPlayer player, DemoRock rock)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RemoveRock(DemoPlayer player, DemoRock rock)
+    {
+        throw new NotImplementedException();
     }
 }
