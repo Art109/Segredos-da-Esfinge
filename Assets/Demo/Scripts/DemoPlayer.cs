@@ -96,6 +96,8 @@ public class DemoPlayer : MonoBehaviour
 
         Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, interactableRange, interactableLayer);
 
+
+        RockReceiver_Interaction(interactables);
         
         Rock_Interaction(interactables);
 
@@ -147,31 +149,32 @@ public class DemoPlayer : MonoBehaviour
         }
     }
 
-    void Balance_Interaction(Collider2D[] interactables){
-        DemoBalance balanceNearby = null;
-        foreach(Collider2D balance in interactables){
-            if(balance.GetComponent<DemoBalance>() != null){
-                balanceNearby = balance.GetComponent<DemoBalance>();
+    void RockReceiver_Interaction(Collider2D[] interactables){
+
+        RockReceiver rockReceiverNearby = null;
+        foreach(Collider2D rockReceiver in interactables){
+            if(rockReceiver.GetComponent<RockReceiver>() != null){
+                rockReceiverNearby = rockReceiver.GetComponent<DemoBalance>();
                 break;
             }
         }
 
-        if(balanceNearby != null){
-           balanceNearby.TakeRock(rockCarried,this);
-        }
-    }
-
-    void Abacus_Interaction(Collider2D[] interactables){
-        /*DemoBalance balanceNearby = null;
-        foreach(Collider2D balance in interactables){
-            if(balance.GetComponent<DemoBalance>() != null){
-                balanceNearby = balance.GetComponent<DemoBalance>();
-                break;
+        if(rockReceiverNearby != null){
+            if(carryingRock){
+                if(Input.GetKeyDown(KeyCode.F)){
+                    rockReceiverNearby.TakeRock(this,rockCarried);
+                    rockCarried = null;
+                    carryingRock = false;
+                }
+            }
+            else{
+                if(Input.GetKeyDown(KeyCode.F)){
+                    rockReceiverNearby.RemoveRock(this, rockCarried);
+                }
             }
         }
 
-        if(balanceNearby != null){
-           balanceNearby.TakeRock(rockCarried,this);
-        }*/
     }
+
+    
 }
