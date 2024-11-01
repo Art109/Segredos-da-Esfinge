@@ -11,17 +11,23 @@ public class DemoPlayer : MonoBehaviour
     [SerializeField]float currentSpeed;
     [SerializeField]float points;
     [SerializeField]int life;
+    [SerializeField]int objectiveWeight;
+    public int ObjectiveWeight{ get{ return objectiveWeight;} set{ objectiveWeight = value; }}
     Vector2 input;
     Rigidbody2D rb;
     Animator animator;
 
     [Header("Atributos da Interação")]
     [SerializeField]LayerMask interactableLayer;
+    [SerializeField]LayerMask rockLayer;
     [SerializeField]float interactableRange;
     bool carryingRock;
     DemoRock rockCarried;
+    bool canDeposit;
+    bool completedObjective = false;
+    public bool CompletedObjective{  set{ completedObjective = value; }}
 
-    public AudioSource somPegadas;
+    public AudioSource audioSource;
 
 
     
@@ -38,13 +44,14 @@ public class DemoPlayer : MonoBehaviour
     void Update()
     {
         Movement();
-        Interaction();
+        if(!completedObjective)
+            Interaction();
     }
 
     void playSomPegadas(bool boolean)
     {
-        somPegadas.pitch = currentSpeed + 0.5f;
-        somPegadas.enabled = boolean;
+        audioSource.pitch = currentSpeed + 0.5f;
+        audioSource.enabled = boolean;
     }
 
     void Movement(){
@@ -65,16 +72,14 @@ public class DemoPlayer : MonoBehaviour
             playSomPegadas(false);
             animator.SetBool("Moving", false);
         }
-
-        
-
-
     }
+
 
      void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, interactableRange);
     }
+
 
     void UpdateSpeed(){
         if(rockCarried != null){
@@ -92,89 +97,92 @@ public class DemoPlayer : MonoBehaviour
         }
     }
 
+
     void Interaction(){
-
-        Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, interactableRange, interactableLayer);
-
-
-        RockReceiver_Interaction(interactables);
         
-        Rock_Interaction(interactables);
-
-        if(interactables.Length != 0){  
-            
-            Debug.Log("Tem Algo Proximo");
-
-        }
-        
-    }
-
-    void Rock_Interaction(Collider2D[] interactables){
-        if(carryingRock){
-            
+        if (carryingRock)
+        {
+            Debug.Log("Estou na interação com pedra");
             rockCarried.FollowPlayer(this);
 
-            
-            if(Input.GetKeyDown(KeyCode.F)){
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                Collider2D interactable = Physics2D.OverlapCircle(transform.position, interactableRange, interactableLayer);
+                if(interactable != null)
+                   canDeposit = true;
+                else
+                    canDeposit = false; 
 
-                    rockCarried.PlayAudioClip("Rock_Ground_Drop");
-                    rockCarried = null;
-                    carryingRock = false;
-                    UpdateSpeed();
-                    Debug.Log("Soltei uma pedra");
-            }
-
-            
-        }
-        else{
-            DemoRock rockNearby = null;  
-            foreach(Collider2D rock in interactables){
-                if(rock.GetComponent<DemoRock>() != null){
-                    rockNearby = rock.GetComponent<DemoRock>();
-                    break;
+                if (canDeposit)
+                {
+                    rockCarried.PlayAudioClip("Rock_Balance_Drop");
+                    RockReceiver rockReceiverComponent = interactable.GetComponent<RockReceiver>();
+                    if (rockReceiverComponent != null)
+                    {
+                        rockReceiverComponent.TakeRock(this, rockCarried);
+                    }
                 }
-            }
-
-            if(rockNearby != null){
-                if(Input.GetKeyDown(KeyCode.F)){
-                    rockCarried = rockNearby;
-                    carryingRock = true;
-                    rockCarried.PlayAudioClip("Rock_Ground_PickUp");
-                    UpdateSpeed();
-                    
-                    Debug.Log("Peguei uma pedra");
+                else
+                {
+                    rockCarried.PlayAudioClip("Rock_Ground_Drop");
                 }
                 
+                UpdateSpeed();
+                carryingRock = false;
+                rockCarried = null;
             }
         }
-    }
+        else
+        {
+            Debug.Log("Estou na interação sem pedra");
+            Collider2D[] rocks = Physics2D.OverlapCircleAll(transform.position, interactableRange, rockLayer);
+            if (rocks.Length > 0)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
+                {
 
-    void RockReceiver_Interaction(Collider2D[] interactables){
 
-        RockReceiver rockReceiverNearby = null;
-        foreach(Collider2D rockReceiver in interactables){
-            if(rockReceiver.GetComponent<RockReceiver>() != null){
-                rockReceiverNearby = rockReceiver.GetComponent<DemoBalance>();
-                break;
-            }
-        }
+                    Collider2D closestRock = null;
+                    float shortestDistance = Mathf.Infinity;
 
-        if(rockReceiverNearby != null){
-            if(carryingRock){
-                if(Input.GetKeyDown(KeyCode.F)){
-                    rockReceiverNearby.TakeRock(this,rockCarried);
-                    rockCarried = null;
-                    carryingRock = false;
+                    // Encontrar a pedra mais próxima
+                    foreach (Collider2D rockCollider in rocks)
+                    {
+                        float distanceToRock = Vector2.Distance(transform.position, rockCollider.transform.position);
+                        if (distanceToRock < shortestDistance)
+                        {
+                            shortestDistance = distanceToRock;
+                            closestRock = rockCollider;
+                        }
+                    }
+
+                    if (closestRock != null)
+                    {
+                        rockCarried = closestRock.GetComponent<DemoRock>();
+                        rockCarried.PlayAudioClip("Rock_Ground_PickUp");
+
+                        foreach (var component in FindObjectsOfType<MonoBehaviour>())
+                        {
+                            if (component is RockReceiver interactableComponent)
+                            {
+                                interactableComponent.RemoveRock(this, rockCarried);
+                            }
+                        }
+
+                        carryingRock = true;
+                    }
                 }
             }
-            else{
-                if(Input.GetKeyDown(KeyCode.F)){
-                    rockReceiverNearby.RemoveRock(this, rockCarried);
-                }
-            }
         }
-
+        
     }
+        
+    public void ApplyDamage(int damage){
+        life -= damage;
+    }
+}
+
+
 
     
-}
+

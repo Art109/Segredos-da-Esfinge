@@ -734,11 +734,15 @@ MonoBehaviour:
   currentSpeed: 0
   points: 0
   life: 0
+  objectiveWeight: 20
   interactableLayer:
     serializedVersion: 2
     m_Bits: 512
+  rockLayer:
+    serializedVersion: 2
+    m_Bits: 64
   interactableRange: 1
-  somPegadas: {fileID: 1223716857}
+  audioSource: {fileID: 1223716857}
 --- !u!212 &1223716856
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1108,6 +1112,10 @@ PrefabInstance:
     - target: {fileID: 3022492392727597862, guid: fc57f86009413c9499cf0aeaf9569c52, type: 3}
       propertyPath: m_Name
       value: DemoRock
+      objectReference: {fileID: 0}
+    - target: {fileID: 3022492392727597862, guid: fc57f86009413c9499cf0aeaf9569c52, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7807589136834020180, guid: fc57f86009413c9499cf0aeaf9569c52, type: 3}
       propertyPath: m_LocalPosition.x
