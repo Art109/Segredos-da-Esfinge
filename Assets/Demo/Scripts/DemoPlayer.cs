@@ -18,7 +18,7 @@ public class DemoPlayer : MonoBehaviour
     Animator animator;
 
     [Header("Atributos da Interação")]
-    [SerializeField]LayerMask interactableLayer;
+    [SerializeField]LayerMask balanceLayer,abacusLayer;
     [SerializeField]LayerMask rockLayer;
     [SerializeField]float interactableRange;
     bool carryingRock;
@@ -99,31 +99,42 @@ public class DemoPlayer : MonoBehaviour
 
 
     void Interaction(){
+
+        Collider2D balance = Physics2D.OverlapCircle(transform.position, interactableRange, balanceLayer);
+        Collider2D abacus = Physics2D.OverlapCircle(transform.position, interactableRange, abacusLayer);
         
         if (carryingRock)
         {
+           
             Debug.Log("Estou na interação com pedra");
             rockCarried.FollowPlayer(this);
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                Collider2D interactable = Physics2D.OverlapCircle(transform.position, interactableRange, interactableLayer);
-                if(interactable != null)
-                   canDeposit = true;
-                else
-                    canDeposit = false; 
+                
 
-                if (canDeposit)
+                if (balance != null)
                 {
+                    Debug.Log("Tem uma balança proxima");
                     rockCarried.PlayAudioClip("Rock_Balance_Drop");
-                    RockReceiver rockReceiverComponent = interactable.GetComponent<RockReceiver>();
+                    RockReceiver rockReceiverComponent = balance.GetComponent<RockReceiver>();
                     if (rockReceiverComponent != null)
                     {
                         rockReceiverComponent.TakeRock(this, rockCarried);
                     }
                 }
-                else
+                else if(abacus != null)
                 {
+                    Debug.Log("Tem uma abaco proxima");
+                    rockCarried.PlayAudioClip("Rock_Balance_Drop");
+                    RockReceiver rockReceiverComponent = abacus.GetComponent<RockReceiver>();
+                    if (rockReceiverComponent != null)
+                    {
+                        rockReceiverComponent.TakeRock(this, rockCarried);
+                    }
+                    
+                }
+                else{
                     rockCarried.PlayAudioClip("Rock_Ground_Drop");
                 }
                 
@@ -160,16 +171,14 @@ public class DemoPlayer : MonoBehaviour
                     {
                         rockCarried = closestRock.GetComponent<DemoRock>();
                         rockCarried.PlayAudioClip("Rock_Ground_PickUp");
-
-                        foreach (var component in FindObjectsOfType<MonoBehaviour>())
-                        {
-                            if (component is RockReceiver interactableComponent)
-                            {
-                                interactableComponent.RemoveRock(this, rockCarried);
-                            }
-                        }
-
                         carryingRock = true;
+
+                        if(abacus != null )
+                            abacus.GetComponent<RockReceiver>().RemoveRock(this,rockCarried);
+                        if(balance != null )
+                            balance.GetComponent<RockReceiver>().RemoveRock(this,rockCarried);
+
+                        
                     }
                 }
             }

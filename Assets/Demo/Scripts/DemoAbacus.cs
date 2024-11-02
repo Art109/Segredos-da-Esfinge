@@ -1,28 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class DemoAbacus : MonoBehaviour , RockReceiver
 {
-    public void RemoveRock(DemoPlayer player, DemoRock rock)
-    {
-        throw new System.NotImplementedException();
-    }
+
+    [SerializeField] GameObject weightDisplayer;
+    DemoRock playerRock;
+    float currentWeight;
+
 
     public void TakeRock(DemoPlayer player, DemoRock rock)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Recebi a pedra");
+        if(rock != null){
+            playerRock = rock;
+            UpdateWeight();
+        }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void RemoveRock(DemoPlayer player, DemoRock rock)
     {
-        
+        Debug.Log("Devolvi a pedra");
+        if (rock == playerRock)
+        {
+            playerRock = null;
+            UpdateWeight();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+
+    void UpdateWeight()
     {
-        
+        currentWeight = 0;
+
+        if(playerRock != null)
+            currentWeight = playerRock.Weight;
+
+        ShowWeight();
+    }
+
+    void ShowWeight(){
+        if(currentWeight > 0){
+            weightDisplayer.SetActive(true);
+            weightDisplayer.GetComponent<TextMeshPro>().text = ((int)currentWeight).ToString();
+
+        }
+        else{
+           weightDisplayer.SetActive(false);
+        }
     }
 }
