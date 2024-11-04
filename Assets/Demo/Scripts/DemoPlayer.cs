@@ -10,7 +10,7 @@ public class DemoPlayer : MonoBehaviour
     [SerializeField]float baseSpeed;
     [SerializeField]float currentSpeed;
     [SerializeField]float points;
-    [SerializeField]int life;
+    [SerializeField]int life = 3;
     [SerializeField]int objectiveWeight;
     public int ObjectiveWeight{ get{ return objectiveWeight;} set{ objectiveWeight = value; }}
     Vector2 input;
@@ -188,6 +188,12 @@ public class DemoPlayer : MonoBehaviour
         
     public void ApplyDamage(int damage){
         life -= damage;
+        if(life <= 0)
+            Die();
+    }
+
+    public void Die(){
+        Debug.Log("Morri");
     }
 }
 

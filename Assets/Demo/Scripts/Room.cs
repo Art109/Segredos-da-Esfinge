@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Room : MonoBehaviour
@@ -33,6 +35,10 @@ public class Room : MonoBehaviour
         DemoBalance.OnDamagePlayers -= DamagePlayers;
     }
 
+    void Start(){
+        playersInRoom = FindObjectsOfType<DemoPlayer>().ToList();
+    }
+
 
     void EndRoom(){
         OnRoomEndend?.Invoke();
@@ -49,19 +55,18 @@ public class Room : MonoBehaviour
     }
 
     void DamagePlayer(DemoPlayer player){
-        if (playersInRoom.Contains(player))
-        {
-            player.ApplyDamage(10); // Suponha que o método ApplyDamage exista no DemoPlayer
+            player.ApplyDamage(1); // Suponha que o método ApplyDamage exista no DemoPlayer
             Debug.Log($"Dano causado ao jogador: {player.name}");
-        }
+        
     }
 
     void DamagePlayers(){
         foreach (var player in playersInRoom)
         {
-            player.ApplyDamage(10); // Suponha que o método ApplyDamage exista no DemoPlayer
+            player.ApplyDamage(1); // Suponha que o método ApplyDamage exista no DemoPlayer
             Debug.Log($"Dano causado ao jogador: {player.name}");
         }
+        Debug.Log("Todos os jogadores sofreram dano");
     }
     
 }

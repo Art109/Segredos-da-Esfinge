@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class DemoBalance : MonoBehaviour, RockReceiver
@@ -57,7 +58,6 @@ public class DemoBalance : MonoBehaviour, RockReceiver
     void UpdateWeight()
     {
         currentWeight = 0; // Reinicia o peso total antes de recalcular
-        //quantidade = 0; // Reinicia a quantidade de jogadores que atingiram o peso objetivo
 
         foreach (var player in playerRocks.Keys)
         {
@@ -71,46 +71,42 @@ public class DemoBalance : MonoBehaviour, RockReceiver
             playerWeights[player] = playerWeight; // Atualiza o peso individual do jogador
             currentWeight += playerWeight; // Adiciona o peso do jogador ao peso total
 
-            // Verifica se o jogador atingiu seu peso objetivo
-            if (Mathf.Approximately(playerWeights[player], player.ObjectiveWeight))
-            {
-                player.CompletedObjective = true;
-                numberOfConclusions++; // Incrementa a quantidade se o jogador atingiu o peso objetivo
-            }
+            
         }
-
-        //if(currentWeight == maxWeight && playerWeights.)
 
         Debug.Log("Peso total atualizado -> " + currentWeight);
-        //Debug.Log("Quantidade de jogadores que atingiram o peso objetivo -> " + quantidade);
-
-        // Realiza a verificação de armadilha e feedback apenas uma vez
-        TrapTrigger();
-        //Feedback();
+        
+        ProcessWeight();
     }
 
-    void TrapTrigger(){
-        // Verifica se o peso total na balança excede o peso máximo
-        if (currentWeight > maxWeight)
-        {
+    void ProcessWeight(){
 
-            Room currentRoom = FindObjectOfType<Room>();
-            // Para as salas 1 e 2, o dano é causado em todos os jogadores
-            if (currentRoom.NumberBalances == 1)
-            {
-                OnDamagePlayers?.Invoke();
+        int numberOfConclusions = 0;
+
+        if(currentWeight > maxWeight)
+            OnDamagePlayers?.Invoke();
+
+        foreach(var player in playerWeights.Keys){
+            if(player.ObjectiveWeight < playerWeights[player]){
+                TrapTrigger(player);
+                //playErrorSound();
             }
-            // Na terceira sala, o dano é causado apenas ao jogador específico
-            else
-            {
-                // Aqui, verificamos qual jogador tem mais peso e causamos dano somente nele
-                foreach (var player in playerWeights.Keys)
-                {
-                    OnDamagePlayer?.Invoke(player);
-                }
+            if(player.ObjectiveWeight == playerWeights[player] ){
+                player.CompletedObjective = true;
+                numberOfConclusions++;
             }
-            //playErrorSound();
         }
+
+        if(numberOfConclusions == playerWeights.Count){
+            BalanceCompleted();
+        }
+    }
+
+    void TrapTrigger(DemoPlayer player){
+        
+        OnDamagePlayer?.Invoke(player);
+        //playErrorSound();
+         
     }
 
 

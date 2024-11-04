@@ -8,7 +8,7 @@ public class DemoAbacus : MonoBehaviour , RockReceiver
 
     [SerializeField] GameObject weightDisplayer;
     DemoRock playerRock;
-    float currentWeight;
+    [SerializeField]float currentWeight;
 
 
     public void TakeRock(DemoPlayer player, DemoRock rock)

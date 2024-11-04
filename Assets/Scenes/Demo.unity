@@ -647,7 +647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1131478244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733,7 +733,7 @@ MonoBehaviour:
   baseSpeed: 1
   currentSpeed: 0
   points: 0
-  life: 0
+  life: 3
   objectiveWeight: 20
   balanceLayer:
     serializedVersion: 2
@@ -1162,6 +1162,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2602465576755128161, guid: fc57f86009413c9499cf0aeaf9569c52, type: 3}
+      propertyPath: weight
+      value: 55
+      objectReference: {fileID: 0}
     - target: {fileID: 3022492392727597862, guid: fc57f86009413c9499cf0aeaf9569c52, type: 3}
       propertyPath: m_Name
       value: DemoRock
