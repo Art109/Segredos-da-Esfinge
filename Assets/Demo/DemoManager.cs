@@ -6,6 +6,9 @@ public class DemoManager : MonoBehaviour
 {
     
    [SerializeField] RoomData roomData;
+   [SerializeField] GameObject playerPrefab;
+   List<DemoPlayer> players = new List<DemoPlayer>();
+   int numberOfPlayers = 2;
    int roomIndex = 0;
 
 
@@ -18,6 +21,7 @@ public class DemoManager : MonoBehaviour
   }
 
    void Start(){
+        PlayerInitializer();
         RoomInitializer();
    }
 
@@ -29,13 +33,50 @@ public class DemoManager : MonoBehaviour
         }
         else
         {
-          Instantiate(roomData.Rooms[roomIndex]);
+          GameObject room = Instantiate(roomData.Rooms[roomIndex]);
+
+          Transform spawnPosition = room.transform.Find("SpawnPlayerPositions");
+
+          Debug.Log(spawnPosition);
+          
+          if(spawnPosition != null)
+          {
+              int playerIndex = 0;
+              
+              foreach(var player in players)
+              {
+                Debug.Log(player);
+                Debug.Log(players.Count);
+                Debug.Log(playerIndex);
+                if(playerIndex < spawnPosition.childCount)
+                {
+                  Debug.Log(spawnPosition.GetChild(playerIndex));
+                  player.transform.position = spawnPosition.GetChild(playerIndex).position;
+                  playerIndex++;
+                }
+              }
+              
+              
+          }
+          
           roomIndex++;
         }
         
    }
 
+   void PlayerInitializer(){
+      for(int i = 0 ; i < numberOfPlayers ; i++)
+      {
+          GameObject player = Instantiate(playerPrefab);
+          players.Add(player.GetComponent<DemoPlayer>());
+      }
+      
+   }
+
    void ChangeRoom(){
+    foreach(var player in players)
+      player.CompletedObjective = false;
+    
      RoomInitializer();
    }
 
