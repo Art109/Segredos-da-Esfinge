@@ -27,6 +27,22 @@ public class DemoRock : MonoBehaviour
     }
 
     void UpdateSprite(){
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                Debug.LogError("SpriteRenderer não encontrado no GameObject.");
+                return;
+            }
+        }
+
+        if (sprites == null || sprites ==  null)
+        {
+            Debug.LogError("DataStorage 'sprites' não está atribuído ou está vazio.");
+            return;
+        }
+
         if (weight <= 5)
         {
             spriteRenderer.sprite = sprites.Sprites[0];

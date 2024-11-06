@@ -498,6 +498,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8019498695885227332}
   - component: {fileID: 3744668637775699175}
+  - component: {fileID: -7658051883100609499}
   - component: {fileID: -7066198577604369442}
   m_Layer: 0
   m_Name: Room 2
@@ -538,6 +539,19 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 2
   m_CellSwizzle: 0
+--- !u!114 &-7658051883100609499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5614668481631849660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0322184343b7b7c488970de8ad9d3872, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rockPrefab: {fileID: 3022492392727597862, guid: fc57f86009413c9499cf0aeaf9569c52, type: 3}
 --- !u!114 &-7066198577604369442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -556,6 +570,7 @@ MonoBehaviour:
   balances:
   - {fileID: 7359491140923902018}
   - {fileID: 44426577323383927}
+  numberOfRocks: 8
 --- !u!1 &5626416286380302680
 GameObject:
   m_ObjectHideFlags: 0
@@ -6695,6 +6710,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5253681996283222182}
     m_Modifications:
+    - target: {fileID: 3994413610259030607, guid: 7bfd48ffa0199674ea640ec206660c7c, type: 3}
+      propertyPath: maxWeight
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 4011409282267941882, guid: 7bfd48ffa0199674ea640ec206660c7c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.56
@@ -6768,6 +6787,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5253681996283222182}
     m_Modifications:
+    - target: {fileID: 3994413610259030607, guid: 7bfd48ffa0199674ea640ec206660c7c, type: 3}
+      propertyPath: maxWeight
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 4011409282267941882, guid: 7bfd48ffa0199674ea640ec206660c7c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.92

@@ -18,9 +18,9 @@ public class ObjectiveGenerator
             denominador = random.Next(numerador + 1, pesoMaximo + 1); // Denominador maior que numerador
             resultado = (pesoMaximo * numerador)/denominador;
         }
-        while (numerador >= denominador && resultado % 1 == 0);  // Garante que a fração é < 1 e inteiro
+        while (numerador >= denominador && resultado % 1 == 0 && resultado >= 10);  // Garante que a fração é < 1 e inteiro
 
-        Debug.Log($"Gerei os valores numerador {numerador} e denominador {denominador}");
+        
 
         return SimplificarFracao(numerador, denominador);
     }

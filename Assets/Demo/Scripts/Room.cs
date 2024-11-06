@@ -11,13 +11,15 @@ public class Room : MonoBehaviour
     [SerializeField] private float conclusionTime;
     [SerializeField] private int score;
     [SerializeField] private float bonusScore;
-    List<DemoRock> rocksInRoom = new List<DemoRock>();
     [SerializeField]List<DemoBalance> balances;
+    [SerializeField]int numberOfRocks;
 
     public static event Action OnRoomEndend;
     
 
     private List<DemoPlayer> playersInRoom = new List<DemoPlayer>();
+
+    RockGenerator rockGenerator;
 
     
     int balaceDone = 0;
@@ -36,13 +38,17 @@ public class Room : MonoBehaviour
     }
 
     void Start(){
+        Debug.Log($"{this.name}Estou começando");
         playersInRoom = FindObjectsOfType<DemoPlayer>().ToList();
         ObjectiveInitiatilizer();
+        rockGenerator = GetComponent<RockGenerator>();
+        SpawnRocks();
     }
 
 
     void EndRoom(){
         OnRoomEndend?.Invoke();
+        Debug.Log($"{this.name}Adeus");
         Destroy(gameObject);
     }
 
@@ -56,6 +62,7 @@ public class Room : MonoBehaviour
     }
 
     void ObjectiveInitiatilizer(){
+        Debug.Log($"{this.name}Defini os objetivos");
         if(balances.Count > 1)
         {
             int balanceIndex = 0;
@@ -81,7 +88,26 @@ public class Room : MonoBehaviour
 
     }
     void SpawnRocks(){
+        Debug.Log($"{this.name}Estou spawnando as pedras");
+        int positionIndex = 0;
+        Transform rockSpawnPosition = this.transform.Find("SpawnRockPositions");
+        foreach(var player in playersInRoom)
+        {
+            List<Transform> positions = new List<Transform>();
+            Transform childPosition = rockSpawnPosition.GetChild(positionIndex);
+            
 
+            for(int i = 0; i < numberOfRocks ; i++)
+            {
+                Transform child = childPosition.GetChild(i);
+                positions.Add(child);
+            }
+
+            // Gera as pedras com o peso objetivo do jogador, incluindo pedras extras
+            rockGenerator.InstatiateRocks(player.ObjectiveWeight, positions);
+            Debug.Log($"{this.name}spawnei {positions.Count} pedras");
+            positionIndex++;
+        }
     }
 
     void DamagePlayer(DemoPlayer player){

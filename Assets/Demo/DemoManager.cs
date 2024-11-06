@@ -69,8 +69,9 @@ public class DemoManager : MonoBehaviour
    }
 
    void ChangeRoom(){
-    foreach(var player in players)
+    foreach(var player in players){
       player.CompletedObjective = false;
+    }
     
      RoomInitializer();
    }

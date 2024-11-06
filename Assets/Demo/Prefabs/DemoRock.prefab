@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8055585414019970190}
   - component: {fileID: 4514887551755317781}
   - component: {fileID: 381149019918030624}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: DemoRock
   m_TagString: Rock
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
