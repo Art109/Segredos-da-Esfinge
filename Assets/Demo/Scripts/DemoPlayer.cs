@@ -13,6 +13,9 @@ public class DemoPlayer : MonoBehaviour
     [SerializeField]int life = 3;
     [SerializeField]int objectiveWeight;
     public int ObjectiveWeight{ get{ return objectiveWeight;} set{ objectiveWeight = value; }}
+    (int numerator, int denominator) objectiveFraction;
+    public (int numerator, int denominator) ObjectiveFraction { get{return objectiveFraction;} set{objectiveFraction = value;} }
+
     Vector2 input;
     Rigidbody2D rb;
     Animator animator;
@@ -43,6 +46,7 @@ public class DemoPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Movement();
         Movement();
         if(!completedObjective)
             Interaction();

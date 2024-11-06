@@ -11,15 +11,15 @@ public class Room : MonoBehaviour
     [SerializeField] private float conclusionTime;
     [SerializeField] private int score;
     [SerializeField] private float bonusScore;
+    List<DemoRock> rocksInRoom = new List<DemoRock>();
+    [SerializeField]List<DemoBalance> balances;
 
     public static event Action OnRoomEndend;
     
 
     private List<DemoPlayer> playersInRoom = new List<DemoPlayer>();
 
-
-    [SerializeField]int numberBalances;
-    public int NumberBalances{get{return numberBalances;}}
+    
     int balaceDone = 0;
 
 
@@ -37,6 +37,7 @@ public class Room : MonoBehaviour
 
     void Start(){
         playersInRoom = FindObjectsOfType<DemoPlayer>().ToList();
+        ObjectiveInitiatilizer();
     }
 
 
@@ -47,11 +48,40 @@ public class Room : MonoBehaviour
 
     void BalanceDone(){
         balaceDone++;
-        if(numberBalances == balaceDone)
+        if(balances.Count == balaceDone)
         {
             Debug.Log("Todas as Balanças dessa sala foram completas");
             EndRoom();
         }
+    }
+
+    void ObjectiveInitiatilizer(){
+        if(balances.Count > 1)
+        {
+            int balanceIndex = 0;
+            foreach(var player in playersInRoom)
+            {
+                if(balanceIndex < balances.Count)
+                {
+                    player.ObjectiveFraction = ObjectiveGenerator.GerarFracaoAleatoria(balances[balanceIndex].MaxWeight);
+                    player.ObjectiveWeight = balances[balanceIndex].MaxWeight * player.ObjectiveFraction.numerator / player.ObjectiveFraction.denominator;
+                    balanceIndex++;
+                }
+            }
+        }
+        else
+        {
+            foreach(var player in playersInRoom)
+            {
+                player.ObjectiveFraction = ObjectiveGenerator.GerarFracaoAleatoria(balances[0].MaxWeight);
+                player.ObjectiveWeight = (balances[0].MaxWeight * player.ObjectiveFraction.numerator) / player.ObjectiveFraction.denominator;  
+            }
+        }
+
+
+    }
+    void SpawnRocks(){
+
     }
 
     void DamagePlayer(DemoPlayer player){

@@ -490,7 +490,8 @@ MonoBehaviour:
   conclusionTime: 300
   score: 20
   bonusScore: 0.2
-  numberBalances: 1
+  balances:
+  - {fileID: 7359491140923902018}
 --- !u!1 &5626416286380302680
 GameObject:
   m_ObjectHideFlags: 0
@@ -4782,6 +4783,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5253681996283222182}
     m_Modifications:
+    - target: {fileID: 3994413610259030607, guid: 7bfd48ffa0199674ea640ec206660c7c, type: 3}
+      propertyPath: maxWeight
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 4011409282267941882, guid: 7bfd48ffa0199674ea640ec206660c7c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.88
@@ -4831,6 +4836,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bfd48ffa0199674ea640ec206660c7c, type: 3}
+--- !u!114 &7359491140923902018 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3994413610259030607, guid: 7bfd48ffa0199674ea640ec206660c7c, type: 3}
+  m_PrefabInstance: {fileID: 5858382879773354509}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3721757362f2a724483ccd7ee6e5b470, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7414696632968012279 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4011409282267941882, guid: 7bfd48ffa0199674ea640ec206660c7c, type: 3}

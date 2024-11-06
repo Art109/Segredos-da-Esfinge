@@ -37,7 +37,6 @@ public class DemoManager : MonoBehaviour
 
           Transform spawnPosition = room.transform.Find("SpawnPlayerPositions");
 
-          Debug.Log(spawnPosition);
           
           if(spawnPosition != null)
           {
@@ -45,12 +44,8 @@ public class DemoManager : MonoBehaviour
               
               foreach(var player in players)
               {
-                Debug.Log(player);
-                Debug.Log(players.Count);
-                Debug.Log(playerIndex);
                 if(playerIndex < spawnPosition.childCount)
                 {
-                  Debug.Log(spawnPosition.GetChild(playerIndex));
                   player.transform.position = spawnPosition.GetChild(playerIndex).position;
                   playerIndex++;
                 }

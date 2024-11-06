@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
         if (piramide.SalaAtual.Numero < 3)
         {
             // A sala 1 e 2 só tem uma balança na lista, então o índice é 0
-            ObjectiveGenerator.DividirPeso(piramide.SalaAtual.Balances[0].PesoMaximo, players);
+            //ObjectiveGenerator.DividirPeso(piramide.SalaAtual.Balances[0].PesoMaximo, players);
         }
         else
         {

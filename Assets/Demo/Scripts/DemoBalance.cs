@@ -8,7 +8,8 @@ public class DemoBalance : MonoBehaviour, RockReceiver
 {
 
     public static event Action OnBalaceCompleted;
-    [SerializeField]float maxWeight;
+    [SerializeField]int maxWeight;
+    public int MaxWeight{get{return maxWeight;}}
     float currentWeight;
 
     private Dictionary<DemoPlayer, List<DemoRock>> playerRocks; // Dicionário para rastrear pedras por jogador
