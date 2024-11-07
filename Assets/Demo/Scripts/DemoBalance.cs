@@ -110,5 +110,10 @@ public class DemoBalance : MonoBehaviour, RockReceiver
          
     }
 
+    public static void TriggerDamagePlayersEvent()
+    {
+        OnDamagePlayers?.Invoke();
+    }
+
 
 }

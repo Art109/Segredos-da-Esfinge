@@ -11,6 +11,7 @@ public class DemoPlayer : MonoBehaviour
     [SerializeField]float currentSpeed;
     [SerializeField]float points;
     [SerializeField]int life = 3;
+    bool isAlive = true;
     [SerializeField]int objectiveWeight;
     public int ObjectiveWeight{ get{ return objectiveWeight;} set{ objectiveWeight = value; }}
     (int numerator, int denominator) objectiveFraction;
@@ -32,6 +33,8 @@ public class DemoPlayer : MonoBehaviour
 
     public AudioSource audioSource;
 
+    //public static event OnPlayerDeath;
+
 
     
 
@@ -45,11 +48,14 @@ public class DemoPlayer : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        Movement();
-        Movement();
-        if(!completedObjective)
-            Interaction();
+    {   
+        if(isAlive)
+        {
+            Movement();
+            if(!completedObjective)
+                Interaction();
+        }
+        
     }
 
     void playSomPegadas(bool boolean)
@@ -196,8 +202,8 @@ public class DemoPlayer : MonoBehaviour
             Die();
     }
 
-    public void Die(){
-        Debug.Log("Morri");
+    void Die(){
+        isAlive = false;
     }
 }
 

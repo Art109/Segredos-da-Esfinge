@@ -8,7 +8,8 @@ using UnityEngine;
 public class Room : MonoBehaviour
 {
     
-    [SerializeField] private float conclusionTime;
+    [SerializeField] private int conclusionTime;
+    public int ConclusionTime{get{return conclusionTime;}}
     [SerializeField] private int score;
     [SerializeField] private float bonusScore;
     [SerializeField]List<DemoBalance> balances;
