@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Unity.Burst.Intrinsics;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DemoPlayer : MonoBehaviour
@@ -12,6 +14,7 @@ public class DemoPlayer : MonoBehaviour
     [SerializeField]float points;
     [SerializeField]int life = 3;
     bool isAlive = true;
+    public bool IsAlive{get{return isAlive;}}
     [SerializeField]int objectiveWeight;
     public int ObjectiveWeight{ get{ return objectiveWeight;} set{ objectiveWeight = value; }}
     (int numerator, int denominator) objectiveFraction;
@@ -27,15 +30,23 @@ public class DemoPlayer : MonoBehaviour
     [SerializeField]float interactableRange;
     bool carryingRock;
     DemoRock rockCarried;
-    bool canDeposit;
     bool completedObjective = false;
-    public bool CompletedObjective{  set{ completedObjective = value; }}
+    public bool CompletedObjective{  get{ return completedObjective; }}
 
     public AudioSource audioSource;
 
-    //public static event OnPlayerDeath;
+    public static event PlayerDeathAlert OnPlayerDeath;
+    public delegate void PlayerDeathAlert(DemoPlayer player);
 
+    void OnEnable(){
+        DemoBalance.OnPlayerCompletion += PlayerCompletion;
+        Room.OnRoomStarted += StartGame;
+    }
 
+    void OnDisable(){
+        DemoBalance.OnPlayerCompletion -= PlayerCompletion;
+        Room.OnRoomStarted -= StartGame;
+    }
     
 
     // Start is called before the first frame update
@@ -148,9 +159,10 @@ public class DemoPlayer : MonoBehaviour
                     rockCarried.PlayAudioClip("Rock_Ground_Drop");
                 }
                 
-                UpdateSpeed();
+                
                 carryingRock = false;
                 rockCarried = null;
+                UpdateSpeed();
             }
         }
         else
@@ -195,6 +207,14 @@ public class DemoPlayer : MonoBehaviour
         }
         
     }
+
+    void StartGame(){
+        completedObjective = false;
+    }
+    void PlayerCompletion(DemoPlayer player){
+        if(player == this)
+            completedObjective = true;
+    }
         
     public void ApplyDamage(int damage){
         life -= damage;
@@ -204,6 +224,7 @@ public class DemoPlayer : MonoBehaviour
 
     void Die(){
         isAlive = false;
+        OnPlayerDeath.Invoke(this);
     }
 }
 

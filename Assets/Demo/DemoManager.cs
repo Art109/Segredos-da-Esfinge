@@ -19,10 +19,12 @@ public class DemoManager : MonoBehaviour
 
   void OnEnable(){
     Room.OnRoomEndend += ChangeRoom;
+    DemoPlayer.OnPlayerDeath += HandlePlayerDeath;
   }
 
   void OnDisable(){
     Room.OnRoomEndend -= ChangeRoom;
+    DemoPlayer.OnPlayerDeath -= HandlePlayerDeath;
   }
 
    void Start(){
@@ -35,7 +37,7 @@ public class DemoManager : MonoBehaviour
       Timer();
    }
 
-
+#region Initializers
    void RoomInitializer(){
         if(roomIndex == roomData.Rooms.Count)
         {
@@ -81,15 +83,25 @@ public class DemoManager : MonoBehaviour
       }
       
    }
+  #endregion
 
    void ChangeRoom(){
-      foreach(var player in players){
-        player.CompletedObjective = false;
-      }
       StopTimer(); 
       RoomInitializer();
    }
 
+   void HandlePlayerDeath(DemoPlayer player){
+      int aux = 0;
+      foreach(var i in players){
+          if(!i.IsAlive)
+            aux++;
+      }
+      if(aux == players.Count){
+        GameOver();
+      }
+   }
+
+  #region timer
    void StartTimer(int time){
       timeRemaining = time;
       timerIsRunning = true;
@@ -109,6 +121,8 @@ public class DemoManager : MonoBehaviour
       }
 
    }
+
+   #endregion
 
 
    void GameOver(){

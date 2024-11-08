@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
 public class DemoBalance : MonoBehaviour, RockReceiver
 {
 
-    public static event Action OnBalaceCompleted;
+    public static event Action OnBalanceCompletion;
+    public static event PlayerCompletion OnPlayerCompletion;
+    public delegate void PlayerCompletion(DemoPlayer player);
     [SerializeField]int maxWeight;
     public int MaxWeight{get{return maxWeight;}}
     float currentWeight;
@@ -20,20 +23,19 @@ public class DemoBalance : MonoBehaviour, RockReceiver
     public static event Action<DemoPlayer> OnDamagePlayer;
 
 
+    void OnEnable(){
+        DemoPlayer.OnPlayerDeath += RemoveDeadPlayer;
+    }
 
+    void OnDisable(){
+        DemoPlayer.OnPlayerDeath -= RemoveDeadPlayer;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         playerRocks = new Dictionary<DemoPlayer, List<DemoRock>>();
         playerWeights = new Dictionary<DemoPlayer, float>();
-    }
-
-
-    void BalanceCompleted(){
-        Debug.Log("Terminei a Balança");
-        OnBalaceCompleted?.Invoke();
-        
     }
 
     public void TakeRock(DemoPlayer player, DemoRock rock)
@@ -82,7 +84,6 @@ public class DemoBalance : MonoBehaviour, RockReceiver
 
     void ProcessWeight(){
 
-        int numberOfConclusions = 0;
 
         if(currentWeight > maxWeight)
             OnDamagePlayers?.Invoke();
@@ -93,14 +94,12 @@ public class DemoBalance : MonoBehaviour, RockReceiver
                 //playErrorSound();
             }
             if(player.ObjectiveWeight == playerWeights[player] ){
-                player.CompletedObjective = true;
-                numberOfConclusions++;
+                OnPlayerCompletion.Invoke(player);
+                OnBalanceCompletion.Invoke();
             }
         }
 
-        if(numberOfConclusions == playerWeights.Count){
-            BalanceCompleted();
-        }
+        
     }
 
     void TrapTrigger(DemoPlayer player){
@@ -113,6 +112,16 @@ public class DemoBalance : MonoBehaviour, RockReceiver
     public static void TriggerDamagePlayersEvent()
     {
         OnDamagePlayers?.Invoke();
+    }
+
+    void RemoveDeadPlayer(DemoPlayer player){
+        if(playerRocks.Keys.Contains(player)){
+            playerRocks.Remove(player);
+        }
+        if(playerWeights.Keys.Contains(player)){
+            playerWeights.Remove(player);
+        }
+        UpdateWeight();
     }
 
 

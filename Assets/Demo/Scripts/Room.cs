@@ -15,6 +15,8 @@ public class Room : MonoBehaviour
     [SerializeField]List<DemoBalance> balances;
     [SerializeField]int numberOfRocks;
 
+
+    public static event Action OnRoomStarted;
     public static event Action OnRoomEndend;
     
 
@@ -27,19 +29,21 @@ public class Room : MonoBehaviour
 
 
     void OnEnable(){
-        DemoBalance.OnBalaceCompleted += BalanceDone;
+        DemoBalance.OnBalanceCompletion += PlayerDone;
         DemoBalance.OnDamagePlayer += DamagePlayer;
         DemoBalance.OnDamagePlayers += DamagePlayers;
+        
     }
 
     void OnDisable(){
-        DemoBalance.OnBalaceCompleted -= BalanceDone;
+        DemoBalance.OnBalanceCompletion -= PlayerDone;
         DemoBalance.OnDamagePlayer -= DamagePlayer;
         DemoBalance.OnDamagePlayers -= DamagePlayers;
+
     }
 
     void Start(){
-        Debug.Log($"{this.name}Estou começando");
+        OnRoomStarted.Invoke();
         playersInRoom = FindObjectsOfType<DemoPlayer>().ToList();
         ObjectiveInitiatilizer();
         rockGenerator = GetComponent<RockGenerator>();
@@ -53,13 +57,30 @@ public class Room : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void BalanceDone(){
-        balaceDone++;
-        if(balances.Count == balaceDone)
+    void PlayerDone(){
+        int i = 0 ;
+        VerifyPlayersInRoom();
+        foreach(var player in playersInRoom){
+            if(player.CompletedObjective)
+                i++;
+        }
+        if(i == playersInRoom.Count)
         {
-            Debug.Log("Todas as Balanças dessa sala foram completas");
+            Debug.Log("Todoss os players completaram o objetivo");
             EndRoom();
         }
+    }
+
+    void VerifyPlayersInRoom(){
+        // Itera de trás para frente para evitar problemas ao remover elementos
+        for (int i = playersInRoom.Count - 1; i >= 0; i--)
+        {
+            if (!playersInRoom[i].IsAlive)
+            {
+                playersInRoom.RemoveAt(i);
+            }
+        }
+        
     }
 
     void ObjectiveInitiatilizer(){
