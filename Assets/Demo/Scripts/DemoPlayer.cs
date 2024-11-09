@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -9,9 +10,12 @@ using UnityEngine;
 public class DemoPlayer : MonoBehaviour
 {
     [Header("Atributos do jogador")]
+    String id;
+    public String Id {set{id = value;}}
     [SerializeField]float baseSpeed;
     [SerializeField]float currentSpeed;
     [SerializeField]float points;
+    public float Points{get{return points;} set{points = value;}}
     [SerializeField]int life = 3;
     bool isAlive = true;
     public bool IsAlive{get{return isAlive;}}
@@ -37,6 +41,9 @@ public class DemoPlayer : MonoBehaviour
 
     public static event PlayerDeathAlert OnPlayerDeath;
     public delegate void PlayerDeathAlert(DemoPlayer player);
+
+    public static event PlayerFeedBackTrigger OnFeedBackTrigger;
+    public delegate void PlayerFeedBackTrigger(String name, DemoPlayer player);
 
     void OnEnable(){
         DemoBalance.OnPlayerCompletion += PlayerCompletion;
@@ -76,8 +83,8 @@ public class DemoPlayer : MonoBehaviour
     }
 
     void Movement(){
-        float moveX = Input.GetAxis("HorizontalP1");
-        float moveY = Input.GetAxis("VerticalP1");
+        float moveX = Input.GetAxis($"Horizontal_{id}");
+        float moveY = Input.GetAxis($"Vertical_{id}");
 
         input = new Vector2(moveX, moveY);
 
@@ -130,7 +137,7 @@ public class DemoPlayer : MonoBehaviour
             Debug.Log("Estou na interação com pedra");
             rockCarried.FollowPlayer(this);
 
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetButtonDown($"Interaction_{id}"))
             {
                 
 
@@ -171,7 +178,7 @@ public class DemoPlayer : MonoBehaviour
             Collider2D[] rocks = Physics2D.OverlapCircleAll(transform.position, interactableRange, rockLayer);
             if (rocks.Length > 0)
             {
-                if (Input.GetKeyDown(KeyCode.F))
+                if (Input.GetButtonDown($"Interaction_{id}"))
                 {
 
 
@@ -218,6 +225,7 @@ public class DemoPlayer : MonoBehaviour
         
     public void ApplyDamage(int damage){
         life -= damage;
+        OnFeedBackTrigger.Invoke("DamageFeedBack", this);
         if(life <= 0)
             Die();
     }

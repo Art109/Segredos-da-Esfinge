@@ -29,14 +29,14 @@ public class Room : MonoBehaviour
 
 
     void OnEnable(){
-        DemoBalance.OnBalanceCompletion += PlayerDone;
+        DemoBalance.OnPlayerCompletion += PlayerDone;
         DemoBalance.OnDamagePlayer += DamagePlayer;
         DemoBalance.OnDamagePlayers += DamagePlayers;
         
     }
 
     void OnDisable(){
-        DemoBalance.OnBalanceCompletion -= PlayerDone;
+        DemoBalance.OnPlayerCompletion -= PlayerDone;
         DemoBalance.OnDamagePlayer -= DamagePlayer;
         DemoBalance.OnDamagePlayers -= DamagePlayers;
 
@@ -57,14 +57,18 @@ public class Room : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void PlayerDone(){
-        int i = 0 ;
+    void PlayerDone(DemoPlayer player){
+        int aux = 0 ;
         VerifyPlayersInRoom();
-        foreach(var player in playersInRoom){
-            if(player.CompletedObjective)
-                i++;
+        foreach(var playerAlive in playersInRoom){
+            if(playerAlive.CompletedObjective)
+            {
+                aux++;
+                player.Points = score;
+            }
+                
         }
-        if(i == playersInRoom.Count)
+        if(aux == playersInRoom.Count)
         {
             Debug.Log("Todoss os players completaram o objetivo");
             EndRoom();

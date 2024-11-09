@@ -82,25 +82,47 @@ public class DemoBalance : MonoBehaviour, RockReceiver
         ProcessWeight();
     }
 
-    void ProcessWeight(){
+    void ProcessWeight()
+{
+    // Verifica se o evento OnDamagePlayers não está nulo antes de invocar
+    if (currentWeight > maxWeight)
+    {
+        if (OnDamagePlayers != null)
+            OnDamagePlayers.Invoke();
+        else
+            Debug.LogWarning("OnDamagePlayers está nulo!");
+    }
 
+    // Verifica se playerWeights está inicializado
+    if (playerWeights == null)
+    {
+        Debug.LogError("playerWeights não foi inicializado!");
+        return;
+    }
 
-        if(currentWeight > maxWeight)
-            OnDamagePlayers?.Invoke();
-
-        foreach(var player in playerWeights.Keys){
-            if(player.ObjectiveWeight < playerWeights[player]){
-                TrapTrigger(player);
-                //playErrorSound();
-            }
-            if(player.ObjectiveWeight == playerWeights[player] ){
-                OnPlayerCompletion.Invoke(player);
-                OnBalanceCompletion.Invoke();
-            }
+    foreach (var player in playerWeights.Keys)
+    {
+        // Verifica se player não é nulo e se possui uma entrada em playerWeights
+        if (player == null || !playerWeights.ContainsKey(player))
+        {
+            Debug.LogWarning("Jogador está nulo ou não existe em playerWeights.");
+            continue;
         }
 
-        
+        if (player.ObjectiveWeight < playerWeights[player])
+        {
+            TrapTrigger(player);
+            // playErrorSound();
+        }
+        else if (player.ObjectiveWeight == playerWeights[player])
+        {
+            // Invoca OnPlayerCompletion se não for nulo
+            OnPlayerCompletion?.Invoke(player);
+
+        }
     }
+}
+
 
     void TrapTrigger(DemoPlayer player){
         

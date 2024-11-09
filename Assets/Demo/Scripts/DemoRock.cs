@@ -20,6 +20,9 @@ public class DemoRock : MonoBehaviour
 
     public void FollowPlayer(DemoPlayer player){
 
+        if(this == null)
+            return;
+
         if(player != null)
             transform.position = player.transform.position;
         else

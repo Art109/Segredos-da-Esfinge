@@ -79,7 +79,9 @@ public class DemoManager : MonoBehaviour
       for(int i = 0 ; i < numberOfPlayers ; i++)
       {
           GameObject player = Instantiate(playerPrefab);
-          players.Add(player.GetComponent<DemoPlayer>());
+          DemoPlayer playerComponent = player.GetComponent<DemoPlayer>();
+          playerComponent.Id = $"P{i+1}";
+          players.Add(playerComponent);
       }
       
    }

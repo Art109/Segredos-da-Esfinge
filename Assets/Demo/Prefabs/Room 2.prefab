@@ -564,8 +564,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 766cef0a03648ca4ca571fe86329ff69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conclusionTime: 300
-  score: 20
+  conclusionTime: 500
+  score: 40
   bonusScore: 0.2
   balances:
   - {fileID: 7359491140923902018}
