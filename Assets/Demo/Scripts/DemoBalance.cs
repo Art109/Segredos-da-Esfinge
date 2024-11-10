@@ -8,7 +8,6 @@ using UnityEngine;
 public class DemoBalance : MonoBehaviour, RockReceiver
 {
 
-    public static event Action OnBalanceCompletion;
     public static event PlayerCompletion OnPlayerCompletion;
     public delegate void PlayerCompletion(DemoPlayer player);
     [SerializeField]int maxWeight;
@@ -17,7 +16,6 @@ public class DemoBalance : MonoBehaviour, RockReceiver
 
     private Dictionary<DemoPlayer, List<DemoRock>> playerRocks; // Dicionário para rastrear pedras por jogador
     private Dictionary<DemoPlayer, float> playerWeights; // Dicionário para rastrear o peso por jogador
-    int numberOfConclusions = 0;
 
     public static event Action OnDamagePlayers;
     public static event Action<DemoPlayer> OnDamagePlayer;

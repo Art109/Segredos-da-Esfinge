@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using TMPro;
 using UnityEngine;
 
 public class DemoManager : MonoBehaviour
@@ -15,6 +16,7 @@ public class DemoManager : MonoBehaviour
    private int initialTime;
    [SerializeField]private float timeRemaining;
    private bool timerIsRunning = false;
+   [SerializeField] TextMeshProUGUI timerText;
 
 
   void OnEnable(){
@@ -115,6 +117,8 @@ public class DemoManager : MonoBehaviour
 
    void Timer(){
       timeRemaining -= Time.deltaTime;
+      timerText.text = $"{(int)timeRemaining}" ;
+
 
       if(timeRemaining <= 0){
         DemoBalance.TriggerDamagePlayersEvent();
