@@ -20,6 +20,12 @@ public class Room : MonoBehaviour
 
     public static event Action OnRoomStarted;
     public static event Action OnRoomEndend;
+
+    public static event ObjectiveUIUpdate OnObjectiveUpdate;
+    public delegate void ObjectiveUIUpdate(DemoPlayer player);
+
+    public static event PlayerPointsUIUpdate OnPointsUpdate;
+    public delegate void PlayerPointsUIUpdate(DemoPlayer player);
     
 
     private List<DemoPlayer> playersInRoom = new List<DemoPlayer>();
@@ -66,6 +72,7 @@ public class Room : MonoBehaviour
             {
                 aux++;
                 player.Points = score;
+                OnPointsUpdate.Invoke(player);
             }
                 
         }
@@ -92,14 +99,7 @@ public class Room : MonoBehaviour
     {
         Debug.Log($"{this.name} Defini os objetivos");
 
-        TextMeshPro[] playerTexts = ObjectiveUI.GetComponentsInChildren<TextMeshPro>();
-        int playerIndex = 0;
-
-        if (playerTexts.Length < playersInRoom.Count)
-        {
-            Debug.LogWarning("O número de playerTexts é menor que o número de playersInRoom.");
-            return;
-        }
+    
 
         if (balances.Count > 1)
         {
@@ -112,11 +112,9 @@ public class Room : MonoBehaviour
                     player.ObjectiveFraction = fraction;
                     player.ObjectiveWeight = (balances[balanceIndex].MaxWeight * player.ObjectiveFraction.numerator) / player.ObjectiveFraction.denominator;
 
-                    // Define o texto no TextMeshPro correspondente
-                    playerTexts[playerIndex].text = $"Objective: {player.ObjectiveFraction.numerator}/{player.ObjectiveFraction.denominator}";
-                    
+                    OnObjectiveUpdate.Invoke(player);
                     balanceIndex++;
-                    playerIndex++;
+                    
                 }
             }
         }
@@ -128,10 +126,7 @@ public class Room : MonoBehaviour
                 player.ObjectiveFraction = fraction;
                 player.ObjectiveWeight = (balances[0].MaxWeight * player.ObjectiveFraction.numerator) / player.ObjectiveFraction.denominator;
 
-                // Define o texto no TextMeshPro correspondente
-                playerTexts[playerIndex].text = $"Objective: {player.ObjectiveFraction.numerator}/{player.ObjectiveFraction.denominator}";
-
-                playerIndex++;
+                OnObjectiveUpdate.Invoke(player);
             }
         }
         else

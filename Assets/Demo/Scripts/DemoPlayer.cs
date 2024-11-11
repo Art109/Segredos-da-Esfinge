@@ -11,7 +11,7 @@ public class DemoPlayer : MonoBehaviour
 {
     [Header("Atributos do jogador")]
     String id;
-    public String Id {set{id = value;}}
+    public String Id {get{return id;}set{id = value;}}
     [SerializeField]float baseSpeed;
     [SerializeField]float currentSpeed;
     [SerializeField]float points;
@@ -44,6 +44,8 @@ public class DemoPlayer : MonoBehaviour
 
     public static event PlayerFeedBackTrigger OnFeedBackTrigger;
     public delegate void PlayerFeedBackTrigger(String name, DemoPlayer player);
+    public static event PlayerDamaged OnPlayerDamaged;
+    public delegate void PlayerDamaged(String name);
 
     void OnEnable(){
         DemoBalance.OnPlayerCompletion += PlayerCompletion;
@@ -226,6 +228,7 @@ public class DemoPlayer : MonoBehaviour
     public void ApplyDamage(int damage){
         life -= damage;
         OnFeedBackTrigger.Invoke("DamageFeedBack", this);
+        OnPlayerDamaged.Invoke($"{id}");
         if(life <= 0)
             Die();
     }
