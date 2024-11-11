@@ -116,14 +116,20 @@ public class DemoPlayer : MonoBehaviour
             if(rockCarried.Weight > 40){
                 currentSpeed = baseSpeed * 0.5f;
                 Debug.Log("Reduzir a velocidade");
+                OnFeedBackTrigger.Invoke("HeavyFeedback",this);
             }
                 
             else if(rockCarried.Weight > 20)
+            {
+                OnFeedBackTrigger.Invoke("MediumFeedback",this);
                 currentSpeed = baseSpeed * 0.8f;
+            }
+                
             
         }
         else{
             currentSpeed = baseSpeed;
+            OnFeedBackTrigger.Invoke("LightFeedback",this);
         }
     }
 
@@ -209,8 +215,9 @@ public class DemoPlayer : MonoBehaviour
                         if(balance != null )
                             balance.GetComponent<RockReceiver>().RemoveRock(this,rockCarried);
 
-                        
+                        UpdateSpeed();
                     }
+
                 }
             }
         }
@@ -222,7 +229,11 @@ public class DemoPlayer : MonoBehaviour
     }
     void PlayerCompletion(DemoPlayer player){
         if(player == this)
+        {
+            OnFeedBackTrigger.Invoke("CompletFeedBack", this);
             completedObjective = true;
+        }
+            
     }
         
     public void ApplyDamage(int damage){
@@ -235,6 +246,7 @@ public class DemoPlayer : MonoBehaviour
 
     void Die(){
         isAlive = false;
+        OnFeedBackTrigger.Invoke("DeathFeedBack", this);
         OnPlayerDeath.Invoke(this);
     }
 }
