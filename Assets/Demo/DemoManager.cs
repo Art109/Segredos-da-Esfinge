@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DemoManager : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class DemoManager : MonoBehaviour
    void Update(){
     if(timerIsRunning)
       Timer();
+      if(Input.GetKeyDown(KeyCode.Escape))
+         SceneManager.LoadScene("Demo");
    }
 
 #region Initializers
