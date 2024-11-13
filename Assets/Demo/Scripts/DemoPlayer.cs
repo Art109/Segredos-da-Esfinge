@@ -116,12 +116,12 @@ public class DemoPlayer : MonoBehaviour
             if(rockCarried.Weight > 40){
                 currentSpeed = baseSpeed * 0.5f;
                 Debug.Log("Reduzir a velocidade");
-                OnFeedBackTrigger.Invoke("HeavyFeedback",this);
+                OnFeedBackTrigger.Invoke("HeavyWeight",this);
             }
                 
             else if(rockCarried.Weight > 20)
             {
-                OnFeedBackTrigger.Invoke("MediumFeedback",this);
+                OnFeedBackTrigger.Invoke("MediumWeight",this);
                 currentSpeed = baseSpeed * 0.8f;
             }
                 
@@ -129,7 +129,7 @@ public class DemoPlayer : MonoBehaviour
         }
         else{
             currentSpeed = baseSpeed;
-            OnFeedBackTrigger.Invoke("LightFeedback",this);
+            OnFeedBackTrigger.Invoke("LightWeight",this);
         }
     }
 

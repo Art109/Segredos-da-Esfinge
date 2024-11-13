@@ -240,7 +240,7 @@ MonoBehaviour:
   rockLayer:
     serializedVersion: 2
     m_Bits: 64
-  interactableRange: 1
+  interactableRange: 0.5
   audioSource: {fileID: 4213215215975436636}
 --- !u!114 &3686794910686187475
 MonoBehaviour:
