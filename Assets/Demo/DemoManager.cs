@@ -33,6 +33,7 @@ public class DemoManager : MonoBehaviour
    void Start(){
         PlayerInitializer();
         RoomInitializer();
+        PlayerPrefs.DeleteAll();
    }
 
    void Update(){
@@ -136,6 +137,10 @@ public class DemoManager : MonoBehaviour
 
    void GameOver(){
       StopTimer();
+      PlayerPrefs.SetInt("player1Score", players[0].Points);
+      PlayerPrefs.SetInt("player2Score", players[1].Points);
+      PlayerPrefs.Save();
+      SceneManager.LoadScene("GameOver");
    }
    
    

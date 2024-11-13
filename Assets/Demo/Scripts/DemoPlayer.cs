@@ -14,8 +14,8 @@ public class DemoPlayer : MonoBehaviour
     public String Id {get{return id;}set{id = value;}}
     [SerializeField]float baseSpeed;
     [SerializeField]float currentSpeed;
-    [SerializeField]float points;
-    public float Points{get{return points;} set{points = value;}}
+    [SerializeField]int points;
+    public int Points{get{return points;} set{points = value;}}
     [SerializeField]int life = 3;
     bool isAlive = true;
     public bool IsAlive{get{return isAlive;}}
