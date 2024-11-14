@@ -12,6 +12,7 @@ public class DemoBalance : MonoBehaviour, RockReceiver
     public delegate void PlayerCompletion(DemoPlayer player);
     [SerializeField]int maxWeight;
     public int MaxWeight{get{return maxWeight;}}
+    [SerializeField] TextMeshPro maxWeightDisplayer;
     float currentWeight;
 
     private Dictionary<DemoPlayer, List<DemoRock>> playerRocks; // Dicionário para rastrear pedras por jogador
@@ -22,6 +23,8 @@ public class DemoBalance : MonoBehaviour, RockReceiver
 
 
     void OnEnable(){
+        System.Random random = new System.Random();
+        maxWeight = random.Next(20, 81);
         DemoPlayer.OnPlayerDeath += RemoveDeadPlayer;
     }
 
@@ -32,6 +35,7 @@ public class DemoBalance : MonoBehaviour, RockReceiver
     // Start is called before the first frame update
     void Start()
     {
+        maxWeightDisplayer.text = $"{maxWeight}";
         playerRocks = new Dictionary<DemoPlayer, List<DemoRock>>();
         playerWeights = new Dictionary<DemoPlayer, float>();
     }
@@ -82,14 +86,14 @@ public class DemoBalance : MonoBehaviour, RockReceiver
 
     void ProcessWeight()
 {
-    // Verifica se o evento OnDamagePlayers não está nulo antes de invocar
+    /*
     if (currentWeight > maxWeight)
     {
         if (OnDamagePlayers != null)
             OnDamagePlayers.Invoke();
         else
             Debug.LogWarning("OnDamagePlayers está nulo!");
-    }
+    }*/
 
     // Verifica se playerWeights está inicializado
     if (playerWeights == null)

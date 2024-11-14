@@ -24,25 +24,34 @@ public class RockGenerator : MonoBehaviour
     {
         List<int> weights = new List<int>();
         int remaningWeight = objectiveWeight;
-        int extraRocksNumber = Random.Range(0,4);
+        
 
         // Gera os pesos principais que somam o peso objetivo
-        for (int i = 0; i < numRocks - extraRocksNumber - 1; i++)
+        for (int i = 0; i < numRocks; i++)
         {
-            int maxWeight = remaningWeight - (numRocks - i - 1); // Garante que o peso final será alcançado
-            int rockValor = random.Next(1, maxWeight);
+            if(i == numRocks - 1 || remaningWeight == 1){
+                weights.Add(remaningWeight);
+                break;
+            }
+
+            int maxWeight = remaningWeight; // Garante que o peso final será alcançado
+            int rockValor = random.Next(1, maxWeight + 1);
             weights.Add(rockValor);
             remaningWeight -= rockValor;
+            if(remaningWeight == 0)
+                break;
+            
         }
         
-        weights.Add(remaningWeight); // Adiciona o peso restante para completar o peso objetivo
-
-        // Gera as pedras extras que não fazem parte da combinação
-        for (int i = 0; i < extraRocksNumber; i++)
+       
+        while (weights.Count < numRocks)
         {
-            int extraWeight = random.Next(1, objectiveWeight); // Peso aleatório menor que o objetivo
+            int extraWeight = random.Next(1, objectiveWeight); // Gera pesos aleatórios menores que o peso objetivo
             weights.Add(extraWeight);
         }
+
+        // Gera as pedras extras que não fazem parte da combinação
+        
 
         // Embaralha a lista para misturar as pedras extras com as pedras válidas
         return weights.OrderBy(x => random.Next()).ToList(); 
