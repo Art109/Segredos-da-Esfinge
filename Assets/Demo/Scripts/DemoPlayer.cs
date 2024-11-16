@@ -10,7 +10,7 @@ using UnityEngine;
 public class DemoPlayer : MonoBehaviour
 {
     [Header("Atributos do jogador")]
-    String id;
+    [SerializeField]String id;
     public String Id {get{return id;}set{id = value;}}
     [SerializeField]float baseSpeed;
     [SerializeField]float currentSpeed;
@@ -129,7 +129,7 @@ public class DemoPlayer : MonoBehaviour
         }
         else{
             currentSpeed = baseSpeed;
-            OnFeedBackTrigger.Invoke("LightWeight",this);
+            //OnFeedBackTrigger.Invoke("LightWeight",this);
         }
     }
 
@@ -230,7 +230,7 @@ public class DemoPlayer : MonoBehaviour
     void PlayerCompletion(DemoPlayer player){
         if(player == this)
         {
-            OnFeedBackTrigger.Invoke("CompletFeedBack", this);
+            OnFeedBackTrigger.Invoke("CompleteFeedBack", this);
             completedObjective = true;
         }
             
