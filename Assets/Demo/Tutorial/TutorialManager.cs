@@ -56,6 +56,9 @@ public class TutorialManager : MonoBehaviour
                 SceneManager.LoadScene("Menu");
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.Backspace))
+            SceneManager.LoadScene("Menu");
     }
 
     void TaskCompletion(String task)

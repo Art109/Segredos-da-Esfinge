@@ -37,10 +37,13 @@ public class DemoManager : MonoBehaviour
    }
 
    void Update(){
-    if(timerIsRunning)
-      Timer();
+      if(timerIsRunning)
+         Timer();
       if(Input.GetKeyDown(KeyCode.Escape))
          SceneManager.LoadScene("Demo");
+      if(Input.GetKeyDown(KeyCode.Backspace))
+         SceneManager.LoadScene("Menu");
+
    }
 
 #region Initializers
