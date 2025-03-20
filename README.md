@@ -50,5 +50,4 @@ Os controles foram divididos para 4 jogadores simultaneamente, sendo 2 deles no 
 ## Instalação
 Atualmente, o jogo não está disponível para download. Futuramente, serão fornecidas instruções para instalação e execução.
 
-## Contato
-Caso tenha dúvidas ou queira contribuir, entre em contato com a equipe!
+
